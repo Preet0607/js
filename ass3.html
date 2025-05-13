@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>assignment3</title>
+</head>
+<body>
+   <center><img id="hoverImage" src="https://img.freepik.com/free-photo/top-view-sunflower_23-2150743070.jpg?ga=GA1.1.495025233.1741236678&semt=ais_hybrid&w=740" alt="Hover Image" width="300"></center>
+   <script>
+    const img = document.getElementById("hoverImage");
+
+    img.addEventListener("mouseover", function () {
+      img.style.filter = "grayscale(100%)";
+    });
+
+    img.addEventListener("mouseout", function () {
+      img.style.filter = "grayscale(0%)";
+    });
+  </script>
+    </div>
+    
+</body>
+</html>
+<!--use of UI event handling-->
