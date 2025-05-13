@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #007bff;
+    }
+
+    .form-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-section textarea, .form-section input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+    }
+
+    .form-section.full-width {
+      grid-template-columns: 1fr;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #007bff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #resumeOutput {
+      margin-top: 40px;
+      padding: 30px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      white-space: pre-line;
+      font-size: 16px;
+    }
+
+    .download-btn {
+      background-color: #28a745;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1> Resume Builder</h1>
+
+    <div class="form-section">
+      <input type="text" id="name" placeholder="Full Name" />
+      <input type="email" id="email" placeholder="Email Address" />
+      <input type="text" id="phone" placeholder="Phone Number" />
+      <input type="text" id="linkedin" placeholder="LinkedIn Profile URL" />
+      <input type="text" id="github" placeholder="GitHub Profile URL" />
+    </div>
+
+    <div class="form-section full-width">
+      <textarea id="summary" rows="4" placeholder="Professional Summary"></textarea>
+      <textarea id="education" rows="4" placeholder="Education (e.g., B.Tech - CSE, ABES EC)"></textarea>
+      <textarea id="experience" rows="4" placeholder="Work Experience"></textarea>
+      <textarea id="projects" rows="4" placeholder="Projects (Title, Description)"></textarea>
+      <textarea id="skills" rows="3" placeholder="Skills (comma separated)"></textarea>
+    </div>
+
+    <button onclick="generateResume()">Generate Resume</button>
+    <button class="download-btn" onclick="downloadResume()">Download as Text</button>
+
+    <div id="resumeOutput"></div>
+  </div>
+
+  <script>
+    function generateResume() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const linkedin = document.getElementById('linkedin').value;
+      const github = document.getElementById('github').value;
+      const summary = document.getElementById('summary').value;
+      const education = document.getElementById('education').value;
+      const experience = document.getElementById('experience').value;
+      const projects = document.getElementById('projects').value;
+      const skills = document.getElementById('skills').value;
+
+      const resume = `
+============================
+${name}
+Email: ${email} | Phone: ${phone}
+LinkedIn: ${linkedin}
+GitHub: ${github}
+============================
+
+Professional Summary:
+${summary}
+
+Education:
+${education}
+
+Experience:
+${experience}
+
+Projects:
+${projects}
+
+Skills:
+${skills.split(',').map(skill => '- ' + skill.trim()).join('\n')}
+      `;
+
+      document.getElementById('resumeOutput').textContent = resume;
+    }
+
+    function downloadResume() {
+      const content = document.getElementById('resumeOutput').textContent;
+      const blob = new Blob([content], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'resume.txt';
+      link.click();
+    }
+  </script>
+</body>
+</html>

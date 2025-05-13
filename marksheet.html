@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ABES EC Marksheet Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #771b06;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .subject-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    button {
+      background-color: #771b06;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #5e1504;
+    }
+
+    .result {
+      background: #f1f1f1;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 30px;
+      white-space: pre-line;
+    }
+
+    @media(max-width: 600px) {
+      .subject-group {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>ABES EC Marksheet Builder</h2>
+    <form id="marksheetForm">
+      <label>Student Name</label>
+      <input type="text" id="name" required>
+
+      <label>Roll Number</label>
+      <input type="text" id="roll" required>
+
+      <label>Branch</label>
+      <select id="branch" required>
+        <option value="">Select</option>
+        <option value="CSE">CSE</option>
+        <option value="ECE">ECE</option>
+        <option value="ME">Mechanical</option>
+        <option value="MCA">MCA</option>
+      </select>
+
+      <div class="subject-group">
+        <div>
+          <label>Subject 1 Marks</label>
+          <input type="number" id="sub1" required>
+        </div>
+        <div>
+          <label>Subject 2 Marks</label>
+          <input type="number" id="sub2" required>
+        </div>
+        <div>
+          <label>Subject 3 Marks</label>
+          <input type="number" id="sub3" required>
+        </div>
+        <div>
+          <label>Subject 4 Marks</label>
+          <input type="number" id="sub4" required>
+        </div>
+        <div>
+          <label>Subject 5 Marks</label>
+          <input type="number" id="sub5" required>
+        </div>
+      </div>
+
+      <button type="button" onclick="generateMarksheet()">Generate Marksheet</button>
+      <button type="button" onclick="downloadMarksheet()">Download</button>
+    </form>
+
+    <div class="result" id="resultArea"></div>
+  </div>
+
+  <script>
+    function generateMarksheet() {
+      const name = document.getElementById("name").value;
+      const roll = document.getElementById("roll").value;
+      const branch = document.getElementById("branch").value;
+      const marks = [
+        parseFloat(document.getElementById("sub1").value),
+        parseFloat(document.getElementById("sub2").value),
+        parseFloat(document.getElementById("sub3").value),
+        parseFloat(document.getElementById("sub4").value),
+        parseFloat(document.getElementById("sub5").value),
+      ];
+
+      if (marks.some(isNaN)) {
+        alert("Please enter all marks.");
+        return;
+      }
+
+      const total = marks.reduce((a, b) => a + b, 0);
+      const percentage = (total / 500) * 100;
+      let grade = "";
+
+      if (percentage >= 90) grade = "A+";
+      else if (percentage >= 80) grade = "A";
+      else if (percentage >= 70) grade = "B+";
+      else if (percentage >= 60) grade = "B";
+      else if (percentage >= 50) grade = "C";
+      else grade = "Fail";
+
+      const resultText = `
+ABES Engineering College - Marksheet
+-------------------------------------
+Name      : ${name}
+Roll No.  : ${roll}
+Branch    : ${branch}
+
+Marks:
+Subject 1 : ${marks[0]}
+Subject 2 : ${marks[1]}
+Subject 3 : ${marks[2]}
+Subject 4 : ${marks[3]}
+Subject 5 : ${marks[4]}
+
+Total     : ${total} / 500
+Percent   : ${percentage.toFixed(2)}%
+Grade     : ${grade}
+-------------------------------------
+`;
+
+      document.getElementById("resultArea").innerText = resultText;
+    }
+
+    function downloadMarksheet() {
+      const result = document.getElementById("resultArea").innerText;
+      if (!result.trim()) {
+        alert("Please generate the marksheet first.");
+        return;
+      }
+
+      const blob = new Blob([result], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "ABESEC_Marksheet.txt";
+      link.click();
+    }
+  </script>
+</body>
+</html>
